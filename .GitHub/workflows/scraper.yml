@@ -1,23 +1,24 @@
 name: Run Scraper
 on:
   schedule:
-    - cron: "00**1"
-    workflow_dispatch:
+  - cron: "00**1"
+  workflow_dispatch:
 jobs:
- run-scraper:
+  run-scraper:
     runs-on: ubuntu-latest
-    - name: Checkout repository
-         uses: actions/checkout@v4
-    - name: Set up Python
-         uses: actions/setup-python@v5
-         with:
-          python-version: "3.11"
-    - name: Install dependencies
-       run: |
-        pip install -r requirements.txt
-    - name: Run scraper
-       env:
-        DATABASE_URL: ${{secrets.DATABASE_URL}}
-        YOUTUBE_API_KEY: ${{secrets.YOUTUBE_API_KEY}}
-       - run: python scraper.py
+    steps:
+     - name: Checkout repository
+             uses: actions/checkout@v4
+     - name: Set up Python
+             uses: actions/setup-python@v5
+             with:
+               python-version: "3.11"
+     - name: Install dependencies
+             run: |
+          pip install -r requirements.txt
+     - name: Run scraper
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+          YOUTUBE_API_KEY: ${{secrets.YOUTUBE_API_KEY}}
+        - run: python scraper.py
   
