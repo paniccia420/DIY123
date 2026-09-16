@@ -107,3 +107,4 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python scraper.py
+        
