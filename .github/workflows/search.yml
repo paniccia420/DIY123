@@ -1,29 +1,30 @@
 name: Search Tutorials
 
 on:
-workflow_dispatch:
-inputs:
-query:
-description: "Search phrase"
-required: true
-default: "leaky faucet"
+  workflow_dispatch:
+    inputs:
+      query:
+        description: "Search phrase"
+        required: true
+        default: "leaky faucet"
 
 jobs:
-run-search:
-runs-on: ubuntu-latest
-steps:
-- name: Checkout repository
-uses: actions/checkout@v4
-- name: Set up Python
-    uses: actions/setup-python@v5
-    with:
-      python-version: "3.11"
+  run-search:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  - name: Install dependencies
-    run: |
-      pip install -r requirements.txt
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-  - name: Run search
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-    run: python search.py "${{ github.event.inputs.query }}"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run search
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: python search.py "${{ github.event.inputs.query }}"
