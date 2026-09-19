@@ -11,12 +11,12 @@ def search_tutorials(query):
     conditions = []
     params = []
     for word in words:
-        conditions.append("(title ILIKE %s OR description ILIKE %s)")
+        conditions.append("(title ILIKE %s OR summary ILIKE %s)")
         params.append(f"%{word}%")
         params.append(f"%{word}%")
 
     where_clause = " AND ".join(conditions)
-    sql = f"SELECT id, title, description, url FROM tutorials WHERE {where_clause} LIMIT 10"
+    sql = f"SELECT id, title, summary, url FROM tutorials WHERE {where_clause} LIMIT 10"
 
     cur.execute(sql, params)
     results = cur.fetchall()
