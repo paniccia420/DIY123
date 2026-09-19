@@ -45,7 +45,12 @@ A user is asking: "{question}"
 Using the tutorials above as reference where relevant, give a clear, practical, step-by-step answer. If the tutorials don't fully cover it, use your own knowledge to fill in the gaps. Keep the tone friendly and easy to follow for a beginner."""
 
     api_key = os.environ["GEMINI_API_KEY"]
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+    headers = {
+        "x-goog-api-key": api_key,
+        "Content-Type": "application/json"
+    }
 
     payload = {
         "contents": [
@@ -57,13 +62,12 @@ Using the tutorials above as reference where relevant, give a clear, practical, 
         ]
     }
 
-    response = requests.post(url, json=payload)
+    response = requests.post(url, headers=headers, json=payload)
     response.raise_for_status()
     data = response.json()
 
     answer = data["candidates"][0]["content"]["parts"][0]["text"]
     return answer
-
 if __name__ == "__main__":
     question = sys.argv[1]
 
