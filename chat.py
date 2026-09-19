@@ -45,7 +45,7 @@ A user is asking: "{question}"
 Using the tutorials above as reference where relevant, give a clear, practical, step-by-step answer. If the tutorials don't fully cover it, use your own knowledge to fill in the gaps. Keep the tone friendly and easy to follow for a beginner."""
 
     api_key = os.environ["GEMINI_API_KEY"]
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
 
     payload = {
         "contents": [
