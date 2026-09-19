@@ -1,51 +1,39 @@
 import os
-import sys
 import psycopg2
 from psycopg2.extras import RealDictCursor
+import sys
 
-def search_tutorials(query, limit=10):
-conn = psycopg2.connect(os.environ["DATABASE_URL"])
-cur = conn.cursor(cursor_factory=RealDictCursor)
+def search_tutorials(query):
+    conn = psycopg2.connect(os.environ["DATABASE_URL"])
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
-words = query.lower().split()
+    words = query.split()
+    conditions = []
+    params = []
+    for word in words:
+        conditions.append("(title ILIKE %s OR description ILIKE %s)")
+        params.append(f"%{word}%")
+        params.append(f"%{word}%")
 
-conditions = []
-params = []
-for word in words:
-    conditions.append("(LOWER(title) LIKE %s OR LOWER(description) LIKE %s)")
-    params.append(f"%{word}%")
-    params.append(f"%{word}%")
+    where_clause = " AND ".join(conditions)
+    sql = f"SELECT id, title, description, url FROM tutorials WHERE {where_clause} LIMIT 10"
 
-where_clause = " AND ".join(conditions) if conditions else "TRUE"
+    cur.execute(sql, params)
+    results = cur.fetchall()
 
-sql = f"""
-    SELECT id, title, description, url
-    FROM tutorials
-    WHERE {where_clause}
-    LIMIT %s
-"""
-params.append(limit)
+    cur.close()
+    conn.close()
 
-cur.execute(sql, params)
-results = cur.fetchall()
+    return results
 
-cur.close()
-conn.close()
-return results
-if name == "main":
-if len(sys.argv) < 2:
-print('Usage: python search.py "your search phrase"')
-sys.exit(1)
+if __name__ == "__main__":
+    query = sys.argv[1]
+    results = search_tutorials(query)
 
-query = " ".join(sys.argv[1:])
-results = search_tutorials(query)
-
-if not results:
-    print(f"No results found for: {query}")
-else:
-    print(f"Found {len(results)} result(s) for: {query}")
-    for r in results:
-        print(f"- {r['title']}")
-        print(f"  {r['url']}")
- 
-
+    if not results:
+        print("No results found.")
+    else:
+        for r in results:
+            print(r["title"])
+            print(r["url"])
+            print("---")
